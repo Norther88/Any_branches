@@ -1,0 +1,14 @@
+// Функция filter() в filter-black-list.js, которая создаёт массив email-адресов, не попавших в чёрный список.
+// В качестве аргументов функция должна принимать: массив строк с исходными email адресами, массив строк с email адресами в чёрном списке.
+
+function filter( validMails=[], blackMail=[]){
+    let validItems=[];    
+    for(let mail of validMails){
+        if (!blackMails.includes(mail)) {
+            validItems.push(mail);
+        }    
+}    
+return validItems;
+}
+
+ export default filter;
