@@ -1,0 +1,49 @@
+import requests
+import csv
+
+
+url = "https://restcountries.com/v3.1/all"
+
+
+response = requests.get(url)
+
+
+if response.status_code == 200:
+    countries_data = response.json()
+else:
+    print("Ошибка при получении данных")
+    exit()
+
+
+fields = [
+    "cca2", "cca3", "cioc", "name_common", "name_official", 
+    "capital", "region", "subregion", "languages", "area", "population"
+]
+
+
+with open('countries_data.csv', mode='w', newline='', encoding='utf-8') as file:
+    writer = csv.DictWriter(file, fieldnames=fields)
+    
+   
+    writer.writeheader()
+
+   
+    for country in countries_data:
+        data = {
+            "cca2": country.get("cca2", ""),
+            "cca3": country.get("cca3", ""),
+            "cioc": country.get("cioc", ""),
+            "name_common": country.get("name", {}).get("common", ""),
+            "name_official": country.get("name", {}).get("official", ""),
+            "capital": country.get("capital", [""])[0],  
+            "region": country.get("region", ""),
+            "subregion": country.get("subregion", ""),
+            "languages": ", ".join(country.get("languages", {}).values()),
+            "area": country.get("area", ""),
+            "population": country.get("population", ""),
+        }
+        
+        
+        writer.writerow(data)
+
+print("Данные успешно записаны в 'countries_data.csv'")
